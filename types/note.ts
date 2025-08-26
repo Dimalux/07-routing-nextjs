@@ -1,3 +1,7 @@
+// файл types/note.ts :
+
+
+
 export interface Note {
   id: string;
   title: string;
@@ -12,5 +16,3 @@ export interface NewNote {
   content: string;
   tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
 }
-
-

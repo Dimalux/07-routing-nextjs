@@ -1,3 +1,5 @@
+// файл components/NoteList/NoteList.tsx  :
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { Note } from "@/types/note";

@@ -1,3 +1,5 @@
+// Файл app/notes/page.tsx :
+
 import { fetchNotes } from "@/lib/api";
 import NotesClient from "./Notes.client";
 // import { NotesResponse } from "@/lib/api";
