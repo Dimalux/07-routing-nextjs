@@ -37,7 +37,13 @@ export const fetchNotes = async (
   }
 
   try {
-    const params: any = { page, perPage, search };
+    // Використовуємо Record замість any
+    const params: Record<string, string | number> = {
+      page,
+      perPage,
+      search
+    };
+    
     // Додаємо tag тільки якщо він переданий і не дорівнює "All"
     if (tag && tag !== "All") {
       params.tag = tag;
