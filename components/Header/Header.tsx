@@ -1,21 +1,26 @@
-import css from '@/components/Header/Header.module.css';
+// components/Header/Header.tsx
+
+
+
+import styles from './Header.module.css';
 import Link from 'next/link';
-
-
+import TagsMenu from '@/components/TagsMenu/TagsMenu';
 
 const Header = () => {
   return (
-    <header className={css.header}>
-      <Link href='/' aria-label='Home'>
+    <header className={styles.header}>
+      <Link href='/' aria-label='Home' className={styles.headerLink}>
         NoteHub
       </Link>
       <nav aria-label='Main Navigation'>
-        <ul className={css.navigation}>
-          <li>
-            <Link href='/'>Home</Link>
+        <ul className={styles.navigation}>
+          <li className={styles.navigationItem}>
+            <Link href='/' className={styles.navigationLink}>
+              Home
+            </Link>
           </li>
-          <li>
-            <Link href='/notes'>Notes</Link>         
+          <li className={styles.navigationItem}>
+            <TagsMenu />
           </li>
         </ul>
       </nav>
@@ -24,4 +29,3 @@ const Header = () => {
 };
 
 export default Header;
-

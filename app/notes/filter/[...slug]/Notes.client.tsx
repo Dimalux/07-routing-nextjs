@@ -1,4 +1,5 @@
-// файл app/notes/Notes.client.tsx :
+// app/notes/filter/[...slug]/Notes.client.tsx
+
 
 "use client";
 
@@ -12,17 +13,18 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
-import styles from "@/app/notes/page.module.css";
-import { NotesResponse } from "@/lib/api";
+import styles from "./page.module.css";
 
 interface NotesClientProps {
   initialPage: number;
   initialSearchQuery: string;
+  tagFilter?: string;
 }
 
 export default function NotesClient({
   initialPage,
   initialSearchQuery,
+  tagFilter,
 }: NotesClientProps) {
   const [page, setPage] = useState(initialPage);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
@@ -30,8 +32,8 @@ export default function NotesClient({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, isError, isSuccess, error } = useQuery({
-    queryKey: ["notes", page, debouncedSearchQuery],
-    queryFn: () => fetchNotes(page, 12, debouncedSearchQuery),
+    queryKey: ["notes", page, debouncedSearchQuery, tagFilter],
+    queryFn: () => fetchNotes(page, 12, debouncedSearchQuery, tagFilter),
     retry: 2,
     placeholderData: keepPreviousData,
   });
@@ -113,7 +115,7 @@ export default function NotesClient({
       </main>
 
       {isModalOpen && (
-        <Modal onClose={handleCloseModal}>
+        <Modal>
           <NoteForm onCancel={handleCloseModal} />
         </Modal>
       )}

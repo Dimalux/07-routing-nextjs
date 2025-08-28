@@ -1,0 +1,40 @@
+/* app/notes/filter/@sidebar/SidebarNotes.module.css */
+
+
+.sidebar {
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-right: 24px;
+  min-width: 200px;
+}
+
+.sidebar h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuItem {
+  margin-bottom: 8px;
+}
+
+.menuLink {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #495057;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.menuLink:hover {
+  background-color: #e9ecef;
+  color: #0d6efd;
+}

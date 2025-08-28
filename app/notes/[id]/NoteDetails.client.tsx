@@ -1,53 +1,39 @@
+// app/notes/[id]/NoteDetails.client.tsx
+
+
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { fetchNoteById } from "@/lib/api";
-import { useParams } from "next/navigation";
-import styles from "@/app/notes/[id]/NoteDetails.client.module.css";
+import { useRouter } from "next/navigation";
+import { Note } from "@/types/note";
+import styles from "./NoteDetails.client.module.css";
 
-export default function NoteDetailsClient({ id: initialId }: { id?: string }) {
-  const params = useParams();
-  const noteId = initialId || (params.id as string);
+interface NoteDetailsClientProps {
+  note: Note;
+}
 
-  const {
-    data: note,
-    isLoading,
-    error,
-    isError,
-  } = useQuery({
-    queryKey: ["note", noteId],
-    queryFn: () => fetchNoteById(noteId),
-    enabled: !!noteId,
-    refetchOnMount: false, // Додано відсутню опцію
-  });
+export default function NoteDetailsClient({ note }: NoteDetailsClientProps) {
+  const router = useRouter();
 
-  if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <p>Loading, please wait...</p>
-      </div>
-    );
-  }
+  const handleClose = () => {
+    router.back();
+  };
 
-  if (isError || !note) {
-    return (
-      <div className={styles.container}>
-        <p>Something went wrong.</p>
-        {error && <p>Error: {error.message}</p>}
-      </div>
-    );
-  }
+  const formattedDate = note.updatedAt
+    ? `Updated at: ${new Date(note.updatedAt).toLocaleDateString()}`
+    : `Created at: ${new Date(note.createdAt).toLocaleDateString()}`;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.item}>
-        <div className={styles.header}>
-          <h2>{note.title}</h2>
-        </div>
-        <p className={styles.content}>{note.content}</p>
-        <p className={styles.date}>
-          {note.createdAt && new Date(note.createdAt).toLocaleDateString()}
-        </p>
+    <div className={styles.modalContent}>
+      <button onClick={handleClose} className={styles.closeButton}>
+        ×
+      </button>
+      
+      <h2 className={styles.title}>{note.title}</h2>
+      <p className={styles.content}>{note.content}</p>
+      
+      <div className={styles.meta}>
+        <span className={styles.tag}>{note.tag}</span>
+        <span className={styles.date}>{formattedDate}</span>
       </div>
     </div>
   );

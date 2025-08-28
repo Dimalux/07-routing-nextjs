@@ -1,51 +1,44 @@
+// components/Modal/Modal.tsx
+
+
+"use client";
+
 import { useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import styles from "./Modal.module.css";
 
 interface ModalProps {
   children: React.ReactNode;
-  onClose: () => void;
 }
 
-export default function Modal({ children, onClose }: ModalProps) {
+export default function Modal({ children }: ModalProps) {
+  const router = useRouter();
+
+  const handleClose = () => {
+    router.back();
+  };
+
   useEffect(() => {
-    // Зберігаємо поточний стан прокрутки
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-
-    // Блокуємо прокрутку
-    document.body.style.overflow = "hidden";
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Escape") {
-        onClose();
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleClose();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
 
-    // Функція очищення
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      // Відновлюємо прокрутку
-      document.body.style.overflow = originalStyle;
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
-  }, [onClose]);
+  }, []);
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
-  return createPortal(
-    <div
-      className={styles.backdrop}
-      role="dialog"
-      aria-modal="true"
-      onClick={handleBackdropClick}
-    >
-      <div className={styles.modal}>{children}</div>
-    </div>,
-    document.body
+  return (
+    <div className={styles.overlay} onClick={handleClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
   );
 }

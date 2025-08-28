@@ -1,50 +1,52 @@
-// файл components/ TagsMenu / TagsMenu.tsx 
+// components/TagsMenu/TagsMenu.tsx
+
 
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import css from "@/components/TagsMenu/TagsMenu.module.css";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import styles from "./TagsMenu.module.css";
 
-const TAGS = ["All", "Todo", "Work", "Personal", "Meeting", "Shopping"];
+const ALL_TAGS = ["Todo", "Work", "Personal", "Meeting", "Shopping"];
 
-const TagsMenu = () => {
+export default function TagsMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-
-  const handleTagClick = (tag: string) => {
-    if (tag === "All") {
-      router.push(`/notes/filter/all`);
-    } else {
-      router.push(`/notes/filter/${tag}`);
-    }
-    setIsOpen(false);
-  };
+  const pathname = usePathname();
+  
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className={css.menuContainer}>
-      <button 
-        className={css.menuButton}
-        onClick={() => setIsOpen(!isOpen)}
-      >
+    <div className={styles.menuContainer}>
+      <button className={styles.menuButton} onClick={toggleMenu}>
         Notes ▾
       </button>
+      
       {isOpen && (
-        <ul className={css.menuList}>
-          {TAGS.map((tag) => (
-            <li key={tag} className={css.menuItem}>
-              <button
-                className={css.menuLink}
-                onClick={() => handleTagClick(tag)}
+        <ul className={styles.menuList}>
+          <li className={styles.menuItem}>
+            <Link 
+              href="/notes/filter/All" 
+              className={styles.menuLink}
+              onClick={toggleMenu}
+            >
+              All Notes
+            </Link>
+          </li>
+          
+          {ALL_TAGS.map(tag => (
+            <li key={tag} className={styles.menuItem}>
+              <Link 
+                href={`/notes/filter/${tag}`}
+                className={styles.menuLink}
+                onClick={toggleMenu}
               >
                 {tag}
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
       )}
     </div>
   );
-};
-
-export default TagsMenu;
+}
