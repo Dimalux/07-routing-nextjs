@@ -1,34 +1,27 @@
-import { fetchNoteById } from "@/lib/api";
-import NoteDetailsClient from "@/app/notes/[id]/NoteDetails.client";
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-} from "@tanstack/react-query";
+// app/notes/[id]/page.tsx
 
-const NoteDetailPage = async ({
-  params,
-}: {
+
+import { HydrationBoundary, dehydrate, QueryClient } from '@tanstack/react-query';
+import { fetchNoteById } from '@/lib/api';
+import NoteDetailsClient from './NoteDetails.client';
+
+interface Props {
   params: Promise<{ id: string }>;
-}) => {
+}
+
+export default async function NoteDetailPage({ params }: Props) {
   const { id } = await params;
   const queryClient = new QueryClient();
 
-  try {
-    await queryClient.prefetchQuery({
-      queryKey: ["note", id],
-      queryFn: () => fetchNoteById(id),
-    });
-  } catch (error) {
-    console.error("Error prefetching note:", error);
-    // Продовжуємо рендеринг, щоб клієнтський компонент міг спробувати знову
-  }
+  // Попереднє завантаження даних
+  const note = await queryClient.fetchQuery({
+    queryKey: ['note', id],
+    queryFn: () => fetchNoteById(id),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NoteDetailsClient id={id} />
+      <NoteDetailsClient note={note} /> 
     </HydrationBoundary>
   );
-};
-
-export default NoteDetailPage;
+}

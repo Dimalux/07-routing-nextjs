@@ -1,5 +1,6 @@
 // app/notes/filter/layout.tsx
 
+import styles from "./layout.module.css";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,13 +9,9 @@ interface LayoutProps {
 
 export default function Layout({ children, sidebar }: LayoutProps) {
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - 200px)' }}>
-      <aside style={{ width: '250px', flexShrink: 0 }}>
-        {sidebar}
-      </aside>
-      <main style={{ flex: 1 }}>
-        {children}
-      </main>
+    <div className={styles.container}>
+      <aside className={styles.sidebar}>{sidebar}</aside>
+      <main className={styles.main}>{children}</main>
     </div>
   );
 }

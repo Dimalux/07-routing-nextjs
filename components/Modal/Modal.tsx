@@ -37,6 +37,13 @@ export default function Modal({ children }: ModalProps) {
   return (
     <div className={styles.overlay} onClick={handleClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <button 
+          className={styles.closeButton} 
+          onClick={handleClose}
+          aria-label="Close modal"
+        >
+          ×
+        </button>
         {children}
       </div>
     </div>

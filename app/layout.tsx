@@ -24,16 +24,21 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ 
-  children 
+  children,
+  modal // Додаємо modal проп
 }: { 
-  children: React.ReactNode 
+  children: React.ReactNode;
+  modal: React.ReactNode; // Додаємо тип для modal
 }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <TanStackProvider>
           <Header />
-          <main>{children}</main>
+          <main>
+            {children}
+            {modal} {/* Додаємо modal сюди */}
+          </main>
           <Footer />
         </TanStackProvider>
       </body>

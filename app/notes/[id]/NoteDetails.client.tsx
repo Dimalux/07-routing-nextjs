@@ -1,39 +1,47 @@
 // app/notes/[id]/NoteDetails.client.tsx
 
 
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { Note } from "@/types/note";
-import styles from "./NoteDetails.client.module.css";
+import { useQuery } from '@tanstack/react-query';
+import { fetchNoteById } from '@/lib/api';
+import { Note } from '@/types/note';
+import styles from './NoteDetails.client.module.css';
 
 interface NoteDetailsClientProps {
-  note: Note;
+  note: Note; // Змінюємо з id на note
 }
 
 export default function NoteDetailsClient({ note }: NoteDetailsClientProps) {
-  const router = useRouter();
+  const { data: noteData, isLoading, error } = useQuery({
+    queryKey: ['note', note.id],
+    queryFn: () => fetchNoteById(note.id),
+    initialData: note, // Використовуємо initialData з серверного рендерингу
+  });
 
-  const handleClose = () => {
-    router.back();
-  };
+  if (isLoading) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
 
-  const formattedDate = note.updatedAt
-    ? `Updated at: ${new Date(note.updatedAt).toLocaleDateString()}`
-    : `Created at: ${new Date(note.createdAt).toLocaleDateString()}`;
+  if (error) {
+    return <div className={styles.error}>Error: {error.message}</div>;
+  }
+
+  if (!noteData) {
+    return <div className={styles.error}>Note not found</div>;
+  }
 
   return (
-    <div className={styles.modalContent}>
-      <button onClick={handleClose} className={styles.closeButton}>
-        ×
-      </button>
-      
-      <h2 className={styles.title}>{note.title}</h2>
-      <p className={styles.content}>{note.content}</p>
-      
+    <div className={styles.container}>
+      <h1 className={styles.title}>{noteData.title}</h1>
+      <p className={styles.content}>{noteData.content}</p>
       <div className={styles.meta}>
-        <span className={styles.tag}>{note.tag}</span>
-        <span className={styles.date}>{formattedDate}</span>
+        <span className={styles.tag}>Tag: {noteData.tag}</span>
+        {noteData.updatedAt && (
+          <span className={styles.date}>
+            Updated: {new Date(noteData.updatedAt).toLocaleDateString()}
+          </span>
+        )}
       </div>
     </div>
   );
