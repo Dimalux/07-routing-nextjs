@@ -20,6 +20,10 @@
 
 
 
+
+
+
+
 // app/notes/filter/layout.tsx
 import styles from "./layout.module.css";
 
@@ -28,10 +32,6 @@ interface LayoutProps {
   sidebar: React.ReactNode;
 }
 
-// Додайте цю функцію
-export function generateStaticParams() {
-  return [{ sidebar: null }];
-}
 
 export default function Layout({ children, sidebar }: LayoutProps) {
   return (

@@ -51,6 +51,7 @@
 
 
 
+
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -74,27 +75,33 @@ export const metadata: Metadata = {
   description: "Manage your notes efficiently with NoteHub",
 };
 
-// Додайте цю функцію
-export function generateStaticParams() {
-  return [{ modal: null }];
-}
 
 export default function RootLayout({
   children,
-  modal
+  modal,
+  sidebar 
 }: {
   children: React.ReactNode;
   modal: React.ReactNode;
+  // sidebar: React.ReactNode; 
+  sidebar?: React.ReactNode; // ← Зробити опціональним
+
+
 }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <TanStackProvider>
           <Header />
-          <main>
-            {children}
-            {modal}
-          </main>
+          <div style={{ display: 'flex', minHeight: '100vh' }}>
+            <aside style={{ width: '250px', background: '#f5f5f5', padding: '20px' }}>
+              {sidebar}
+            </aside>
+            <main style={{ flex: 1, padding: '20px' }}>
+              {children}
+            </main>
+          </div>
+          {modal}
           <Footer />
         </TanStackProvider>
       </body>
