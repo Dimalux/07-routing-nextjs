@@ -1,9 +1,63 @@
 // components/Modal/Modal.tsx
 
 
+// "use client";
+
+// import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import styles from "./Modal.module.css";
+
+// interface ModalProps {
+//   children: React.ReactNode;
+// }
+
+// export default function Modal({ children }: ModalProps) {
+//   const router = useRouter();
+
+//   const handleClose = () => {
+//     router.back();
+//   };
+
+//   useEffect(() => {
+//     const handleEscape = (e: KeyboardEvent) => {
+//       if (e.key === "Escape") {
+//         handleClose();
+//       }
+//     };
+
+//     document.addEventListener("keydown", handleEscape);
+//     document.body.style.overflow = "hidden";
+
+//     return () => {
+//       document.removeEventListener("keydown", handleEscape);
+//       document.body.style.overflow = "unset";
+//     };
+//   }, []);
+
+//   return (
+//     <div className={styles.overlay} onClick={handleClose}>
+//       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+//         <button 
+//           className={styles.closeButton} 
+//           onClick={handleClose}
+//           aria-label="Close modal"
+//         >
+//           ×
+//         </button>
+//         {children}
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+// components/Modal/Modal.tsx
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./Modal.module.css";
 
@@ -14,9 +68,9 @@ interface ModalProps {
 export default function Modal({ children }: ModalProps) {
   const router = useRouter();
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     router.back();
-  };
+  }, [router]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -32,7 +86,7 @@ export default function Modal({ children }: ModalProps) {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
     };
-  }, []);
+  }, [handleClose]); // Додаємо handleClose в залежності
 
   return (
     <div className={styles.overlay} onClick={handleClose}>

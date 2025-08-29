@@ -1,5 +1,7 @@
 // app/layout.tsx
 
+
+
 // import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 // import "./globals.css";
@@ -48,6 +50,7 @@
 
 
 
+
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -71,16 +74,14 @@ export const metadata: Metadata = {
   description: "Manage your notes efficiently with NoteHub",
 };
 
-// Для статичних маршрутів
+// Додайте цю функцію
 export function generateStaticParams() {
-  return [
-    { modal: null }
-  ];
+  return [{ modal: null }];
 }
 
-export default function RootLayout({ 
+export default function RootLayout({
   children,
-  modal 
+  modal
 }: {
   children: React.ReactNode;
   modal: React.ReactNode;
