@@ -1,4 +1,5 @@
-// файл components/NoteList/NoteList.tsx  :
+// components/NoteList/NoteList.tsx
+
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
@@ -44,8 +45,12 @@ export default function NoteList({ notes }: NoteListProps) {
           <div className={styles.footer}>
             <span className={styles.tag}>{note.tag}</span>
             <div className={styles.actions}>
-              {/* Додано посилання View details перед кнопкою Delete */}
-              <Link href={`/notes/${note.id}`} className={styles.link}>
+             
+              <Link 
+                href={`/notes/${note.id}`} 
+                className={styles.link}
+                scroll={false} 
+              >
                 View details
               </Link>
               <button
