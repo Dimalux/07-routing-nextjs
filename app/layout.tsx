@@ -71,16 +71,20 @@ export const metadata: Metadata = {
   description: "Manage your notes efficiently with NoteHub",
 };
 
-// Додайте тип для props з optional modal
-interface RootLayoutProps {
-  children: React.ReactNode;
-  modal?: React.ReactNode; // Робимо modal optional
+// Для статичних маршрутів
+export function generateStaticParams() {
+  return [
+    { modal: null }
+  ];
 }
 
 export default function RootLayout({ 
   children,
-  modal // Тепер modal не обов'язковий
-}: RootLayoutProps) {
+  modal 
+}: {
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -88,7 +92,7 @@ export default function RootLayout({
           <Header />
           <main>
             {children}
-            {modal} {/* Рендеримо modal тільки якщо він є */}
+            {modal}
           </main>
           <Footer />
         </TanStackProvider>
