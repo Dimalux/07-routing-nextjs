@@ -1,27 +1,30 @@
 // app/@modal/(.)notes/[id]/page.tsx
 
-"use client";
-
-import { use } from "react";
-import { useRouter } from "next/navigation";
+import { QueryClient, dehydrate } from "@tanstack/react-query";
+import { HydrationBoundary } from "@tanstack/react-query";
 import Modal from "@/components/Modal/Modal";
-import NotePreview from "./NotePreview.client";
+import NotePreview from "@/app/@modal/(.)notes/[id]/NotePreview.client";
+import { fetchNoteById } from "@/lib/api";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default function NoteModal({ params }: Props) {
-  const router = useRouter();
-  const { id } = use(params);
+export default async function NoteModal({ params }: Props) {
+  const { id } = await params;
+  const queryClient = new QueryClient();
 
-  const handleClose = () => {
-    router.back();
-  };
+  // Префетчимо дані на сервері
+  await queryClient.prefetchQuery({
+    queryKey: ["note", id], // Правильний queryKey з id
+    queryFn: () => fetchNoteById(id), // Правильна queryFn
+  });
 
   return (
     <Modal>
-      <NotePreview noteId={id} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NotePreview noteId={id} />
+      </HydrationBoundary>
     </Modal>
   );
 }

@@ -1,6 +1,5 @@
 // app/@modal/(.)notes/[id]/NotePreview.client.tsx
 
-
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
@@ -20,6 +19,7 @@ export default function NotePreview({ noteId }: NotePreviewProps) {
   } = useQuery({
     queryKey: ["note", noteId],
     queryFn: () => fetchNoteById(noteId),
+    refetchOnMount: true, // refetchOnMount присутній
   });
 
   if (isLoading) {
