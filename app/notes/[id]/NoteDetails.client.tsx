@@ -1,20 +1,23 @@
 // app/notes/[id]/NoteDetails.client.tsx
 
+"use client";
 
-'use client';
-
-import { useQuery } from '@tanstack/react-query';
-import { fetchNoteById } from '@/lib/api';
-import { Note } from '@/types/note';
-import styles from './NoteDetails.client.module.css';
+import { useQuery } from "@tanstack/react-query";
+import { fetchNoteById } from "@/lib/api";
+import { Note } from "@/types/note";
+import styles from "./NoteDetails.client.module.css";
 
 interface NoteDetailsClientProps {
-  note: Note; // Змінюємо з id на note
+  note: Note;
 }
 
 export default function NoteDetailsClient({ note }: NoteDetailsClientProps) {
-  const { data: noteData, isLoading, error } = useQuery({
-    queryKey: ['note', note.id],
+  const {
+    data: noteData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["note", note.id],
     queryFn: () => fetchNoteById(note.id),
     initialData: note, // Використовуємо initialData з серверного рендерингу
   });
