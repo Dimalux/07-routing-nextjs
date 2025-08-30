@@ -1,6 +1,6 @@
 // app/notes/filter/[...slug]/page.tsx
 import { fetchNotes } from "@/lib/api";
-import NotesClient from "./Notes.client";
+import NotesClient from "@/app/notes/filter/[...slug]/Notes.client";
 import { QueryClient, dehydrate } from "@tanstack/react-query";
 import { HydrationBoundary } from "@tanstack/react-query";
 
@@ -12,10 +12,13 @@ interface NotesPageProps {
   }>;
 }
 
-export default async function NotesPage({ params, searchParams }: NotesPageProps) {
+export default async function NotesPage({
+  params,
+  searchParams,
+}: NotesPageProps) {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
-  
+
   const page = parseInt(resolvedSearchParams.page || "1");
   const searchQuery = resolvedSearchParams.search || "";
   const tagFilter = resolvedParams.slug?.[0];
@@ -29,8 +32,8 @@ export default async function NotesPage({ params, searchParams }: NotesPageProps
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient 
-        initialPage={page} 
+      <NotesClient
+        initialPage={page}
         initialSearchQuery={searchQuery}
         tagFilter={tagFilter}
       />
